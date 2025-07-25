@@ -1,0 +1,26 @@
+{
+  "name": "playlistmaker-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend"
+  ],
+  "scripts": {
+    "lint": "eslint . --ext .js,.jsx",
+    "format": "prettier --write .",
+    "dev": "npx concurrently \"npm:start --workspace=apps/backend\" \"npm:start --workspace=apps/frontend\"",
+    "dev:backend": "npm run dev --workspace=apps/backend",
+    "dev:frontend": "npm run dev --workspace=apps/frontend",
+    "dev:fullstack": "npx concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "test:backend": "npm run test --workspace=apps/backend",
+    "seed:db": "npm run seed --workspace=apps/backend",
+    "clean:node": "find . -type d -name 'node_modules' -prune -exec rm -rf '{}' +",
+    "install:node": "npm install && cd apps/backend && npm install && cd ../frontend && npm install && cd ../.."
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.37.1",
+    "prettier": "^3.2.5"
+  }
+}

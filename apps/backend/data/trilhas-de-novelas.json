@@ -1,0 +1,308 @@
+[
+  {
+    "nome": "Chocolate com Pimenta",
+    "ano": 2003,
+    "horario_exibicao": "6",
+    "trilhas": [
+      {
+        "tipo": "nacional",
+        "faixas": [
+          {
+            "nome": "Além do Arco-Íris",
+            "interprete": "Luíza Possi",
+            "audio": "https://www.youtube.com/watch?v=OL1PF6HNW8Q"
+          },
+          {
+            "nome": "Tristeza do Jeca",
+            "interprete": "Zezé di Camargo & Luciano",
+            "audio": "https://www.youtube.com/watch?v=v0AI9pPiEYE"
+          },
+          {
+            "nome": "Sensação",
+            "interprete": "KLB",
+            "audio": "https://www.youtube.com/watch?v=7iNAhFAg5-Q"
+          },
+          {
+            "nome": "Encontro (Por um instante o amor)",
+            "interprete": "Fábio Nestares",
+            "audio": "https://www.youtube.com/watch?v=y6IKRkmjl18"
+          },
+          {
+            "nome": "Toda Vez Que Eu Digo Adeus",
+            "interprete": "Cássia Eller",
+            "audio": "https://www.youtube.com/watch?v=4hejjXGXor0"
+          },
+          {
+            "nome": "Voa Bicho",
+            "interprete": "Milton Nascimento",
+            "audio": "https://www.youtube.com/watch?v=mq4Cu7rIi0c"
+          },
+          {
+            "nome": "Pra Lembrar de Nós",
+            "interprete": "Flávio Venturini",
+            "audio": "https://www.youtube.com/watch?v=LtmVkU-tDYk"
+          },
+          {
+            "nome": "Ta-hí (Pra Você Gostar de Mim)",
+            "interprete": "Eduardo Dussek",
+            "audio": "https://www.youtube.com/watch?v=HhYihcQh9EI"
+          },
+          {
+            "nome": "Urubu Malandro",
+            "interprete": "Abraçando Jacaré",
+            "audio": "https://www.youtube.com/watch?v=2rsNjjbs9hM"
+          },
+          {
+            "nome": "Sensível Demais",
+            "interprete": "Nalanda",
+            "audio": "https://www.youtube.com/watch?v=PnxcFetC1j8"
+          },
+          {
+            "nome": "Valsa Brasileira",
+            "interprete": "Luiz Melodia",
+            "audio": "https://www.youtube.com/watch?v=WhxO12BM2a0"
+          },
+          {
+            "nome": "De Um Jeito Que Não Sai",
+            "interprete": "Leila Pinheiro",
+            "audio": "https://www.youtube.com/watch?v=IsdB74Jgz6o"
+          },
+          {
+            "nome": "Apanhei-te Mini Moog",
+            "interprete": "Mú Carvalho",
+            "audio": "https://www.youtube.com/watch?v=6MregLw3to0"
+          },
+          {
+            "nome": "Chocolate com Pimenta",
+            "interprete": "Deborah Blando",
+            "audio": "https://www.youtube.com/watch?v=DJaO0AI93Wg"
+          }
+        ]
+      },
+      {
+        "tipo": "internacional",
+        "faixas": [
+          {
+            "nome": "Im In The Mood For Love",
+            "interprete": "Rod Stewart",
+            "audio": "https://www.youtube.com/watch?v=hKp4jGps3ek"
+          },
+          {
+            "nome": "Everytime We Say Goodbye",
+            "interprete": "Steve Tyrell",
+            "audio": "https://www.youtube.com/watch?v=5y9SBwmau2I"
+          },
+          {
+            "nome": "Hey There",
+            "interprete": "Bette Midler",
+            "audio": "https://www.youtube.com/watch?v=Feqh7bCf-sU"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nome": "O Beijo do Vampiro",
+    "ano": 2002,
+    "horario_exibicao": "7",
+    "trilhas": [
+      {
+        "tipo": "nacional",
+        "faixas": [
+          {
+            "nome": "Pelos Ares",
+            "interprete": "Adriana Calcanhotto",
+            "audio": "https://www.youtube.com/watch?v=1FAVM6AZ16I"
+          },
+          {
+            "nome": "Isso",
+            "interprete": "Titãs",
+            "audio": "https://www.youtube.com/watch?v=81MvpI7hVEg"
+          },
+          {
+            "nome": "Cada Segundo (I Want To Be Your Man)",
+            "interprete": "Maurício Manieri",
+            "audio": "https://www.youtube.com/watch?v=yZKle4a0WBc"
+          },
+          {
+            "nome": "Baya Baya (Instrumental)",
+            "interprete": "Safri Duo",
+            "audio": "https://www.youtube.com/watch?v=ID54FNe6e_s"
+          }
+        ]
+      },
+      {
+        "tipo": "internacional",
+        "faixas": [
+          {
+            "nome": "Extraños Nada Mas (Strangers In The Night)",
+            "interprete": "Julio Iglesias / Orquestra conduzida por Gary Lindsay",
+            "audio": "https://www.youtube.com/watch?v=bMH1Vll5E6o"
+          },
+          {
+            "nome": "Fool",
+            "interprete": "Shakira",
+            "audio": "https://www.youtube.com/watch?v=ZpW_u1gIidU"
+          },
+          {
+            "nome": "Vater Unser",
+            "interprete": "E Nomine",
+            "audio": "https://www.youtube.com/watch?v=IgPtz7svaKk"
+          },
+          {
+            "nome": "Papa Don't Preach",
+            "interprete": "Kelly Osbourne",
+            "audio": "https://www.youtube.com/watch?v=8BYNHfVySwQ"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nome": "Vale tudo",
+    "ano": 2025,
+    "horario_exibicao": "9",
+    "trilhas": [
+      {
+        "tipo": "nacional",
+        "faixas": [
+          {
+            "nome": "Brasil",
+            "interprete": "Gal Costa",
+            "audio": "https://www.youtube.com/watch?v=PCant0HNTvY"
+          },
+          {
+            "nome": "Preciso Dizer Que Eu Te Amo",
+            "interprete": "Cazuza",
+            "audio": "https://www.youtube.com/watch?v=-YmhWG1UtW4"
+          },
+          {
+            "nome": "De Quem É A Culpa? (part. Marília Mendonça)",
+            "interprete": "Cristiano Araújo",
+            "audio": "https://www.youtube.com/watch?v=PdOM03Xxkgo"
+          },
+          {
+            "nome": "Olha",
+            "interprete": "Maria Bethânia",
+            "audio": "https://www.youtube.com/watch?v=yS70ASoee_g"
+          },
+          {
+            "nome": "Quase Um Segundo",
+            "interprete": "Ney Matogrosso",
+            "audio": "https://www.youtube.com/watch?v=mXbh2CWy9yk"
+          },
+          {
+            "nome": "Certas Coisas",
+            "interprete": "Lenine",
+            "audio": "https://www.youtube.com/watch?v=dWsps4Rtm7o"
+          },
+          {
+            "nome": "Dindi",
+            "interprete": "Tom Jobim",
+            "audio": "https://www.youtube.com/watch?v=1xtH7wXS0TA"
+          },
+          {
+            "nome": "Barato Total",
+            "interprete": "Gilberto Gil",
+            "audio": "https://www.youtube.com/watch?v=ndMJ-to07rQ"
+          },
+          {
+            "nome": "Isto Aqui, o Que É?",
+            "interprete": "Caetano Veloso",
+            "audio": "https://www.youtube.com/watch?v=lbDu3VZAOQs"
+          },
+          {
+            "nome": "Gente",
+            "interprete": "Xande de Pilares",
+            "audio": "https://www.youtube.com/watch?v=6CFpJpAT30o"
+          },
+          {
+            "nome": "Nossa Resenha (part. Caetano Veloso)",
+            "interprete": "Os Garotin",
+            "audio": "https://www.youtube.com/watch?v=Ri9joxFENic"
+          },
+          {
+            "nome": "Quem Tem Um Amigo (Tem Tudo) (part. Zeca Pagodinho e Tokyo Ska Paradise Orchestra)",
+            "interprete": "Emicida",
+            "audio": "https://www.youtube.com/watch?v=jwrX-x26zTQ"
+          },
+          {
+            "nome": "Faz Parte do Meu Show",
+            "interprete": "Cazuza",
+            "audio": "https://www.youtube.com/watch?v=nonJx3Q0ZNo"
+          }
+        ]
+      },
+      {
+        "tipo": "internacional",
+        "faixas": [
+          {
+            "nome": "LUNCH",
+            "interprete": "Billie Eilish",
+            "audio": "https://www.youtube.com/watch?v=jsptjaAef7Q"
+          },
+          {
+            "nome": "Super Graphic Ultra Modern Girl",
+            "interprete": "Chappell Roan",
+            "audio": "https://www.youtube.com/watch?v=eEDiw-6VTco"
+          },
+          {
+            "nome": "Soltera",
+            "interprete": "Shakira",
+            "audio": "https://www.youtube.com/watch?v=oC3pVeJraUo"
+          },
+          {
+            "nome": "I Lied, I’m Sorry",
+            "interprete": "Chloe Qisha",
+            "audio": "https://www.youtube.com/watch?v=M3lWm8QNGcc"
+          },
+          {
+            "nome": "PIMP",
+            "interprete": "Bacao Rhythm & Steel Band",
+            "audio": "https://www.youtube.com/watch?v=MQ6J4xHuMgc"
+          },
+          {
+            "nome": "Solidarité (feat. Seu Jorge, Lamomali, Toumani Diabaté, Sidiki Diabaté, Nekfeu, Youssou N'Dour, Sanjay Khan, Santigold, Hiba Tawaji)",
+            "interprete": "-M-",
+            "audio": "https://www.youtube.com/watch?v=ZEq7q8IMz9U"
+          },
+          {
+            "nome": "LA FAMA (part. The Weeknd)",
+            "interprete": "ROSALÍA",
+            "audio": "https://www.youtube.com/watch?v=BwBVEB3jGLs"
+          },
+          {
+            "nome": "Modern Love",
+            "interprete": "Zaho de Sagazan",
+            "audio": "https://www.youtube.com/watch?v=dnlPjGKjRec"
+          },
+          {
+            "nome": "Lonely Soul",
+            "interprete": "Unkle",
+            "audio": "https://www.youtube.com/watch?v=XrFECnl3vno"
+          },
+          {
+            "nome": "Et Si Tu N'existais Pas",
+            "interprete": "Iggy Pop",
+            "audio": "https://www.youtube.com/watch?v=s1KbGGDdH-I"
+          },
+          {
+            "nome": "Chat dans la nuit (part. Romain Muller)",
+            "interprete": "DOPAMOON",
+            "audio": "https://www.youtube.com/watch?v=yxSqkIimIDQ"
+          },
+          {
+            "nome": "Hourglass",
+            "interprete": "Balthazar",
+            "audio": "https://www.youtube.com/watch?v=Mkf1gSDqctw"
+          },
+          {
+            "nome": "Nobody's Soldier",
+            "interprete": "Hozier",
+            "audio": "https://www.youtube.com/watch?v=pxosHw2MXrs"
+          }
+        ]
+      }
+    ]
+  }
+]

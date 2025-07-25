@@ -1,0 +1,126 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #121212;
+  color: #f5f5f5;
+  overflow-x: hidden;
+}
+
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+header {
+  background: linear-gradient(180deg, #000000 0%, #090D12 100%);
+  padding: 2rem 1rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+header h1::before {
+  content: '';
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-image: url('data:image/svg+xml;utf8,<svg aria-hidden="true" fill="white" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.5937 3.8906C11.2228 3.3342 10.5983 3 9.92963 3H3C1.34315 3 0 4.34315 0 6V25C0 27.2091 1.79086 29 4 29H28C30.2091 29 32 27.2091 32 25V10C32 7.79086 30.2091 6 28 6H14.0704C13.4017 6 12.7772 5.6658 12.4063 5.1094L11.5937 3.8906ZM16 13.4395C17.2403 11.6172 20.1031 11.4612 21.5087 13.3388L21.59 13.4473C22.6951 14.9235 22.4906 16.959 21.1122 18.2044L16.7731 22.1247L16.759 22.1374C16.6994 22.1914 16.6142 22.2686 16.5289 22.3276C16.4209 22.4024 16.2421 22.5 16 22.5C15.7578 22.5 15.579 22.4024 15.471 22.3276C15.3857 22.2686 15.3005 22.1914 15.2409 22.1374L15.2268 22.1247L10.8877 18.2044C9.50926 16.959 9.3048 14.9235 10.4099 13.4473L10.4912 13.3388C11.8968 11.4612 14.7596 11.6172 16 13.4395Z" /></svg>');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #f0f0f0;
+  margin-top: 1rem;
+}
+
+.MuiTypography-h5 {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.MuiPaper-root {
+  background-color: #1e1e1e;
+  border-radius: 12px;
+}
+
+.MuiDataGrid-root {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border: none;
+}
+
+.MuiDataGrid-columnHeaders {
+  background-color: #2c2c2c;
+  font-weight: bold;
+}
+
+.MuiDataGrid-cell {
+  border-bottom: 1px solid #333;
+}
+
+.MuiChip-root {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.MuiInputBase-root {
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: #444;
+}
+
+.MuiIconButton-root {
+  color: #f44336;
+}
+
+.react-player {
+  margin-right: 16px;
+}
+
+.container {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 1200px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}

@@ -1,0 +1,51 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: apps/backend
+
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: apps/frontend
+
+      - name: Run backend tests with coverage
+        run: |
+          npm run test:coverage
+          npx istanbul check-coverage --branches 70 --functions 70 --lines 70 --statements 70
+        working-directory: apps/backend
+
+      - name: Build frontend
+        run: npm run build
+        working-directory: apps/frontend
+
+      - name: Deploy to Render
+        if: github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST "$RENDER_DEPLOY_HOOK_URL"
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}

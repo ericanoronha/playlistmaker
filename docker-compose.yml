@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  playlistmaker-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: playlistmaker
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}
+      - FIREBASE_SERVICE_ACCOUNT_JSON=${FIREBASE_SERVICE_ACCOUNT_JSON}
+    networks:
+      - playlistmaker-net
+
+networks:
+  playlistmaker-net:
+    driver: bridge
