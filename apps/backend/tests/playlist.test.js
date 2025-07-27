@@ -92,3 +92,41 @@ describe('Playlist API (mocked)', () => {
     expect(res.statusCode).toBe(404);
   });
 });
+
+describe('Playlist API (mocked)', () => {
+  it('GET /api/songs deve retornar 200', async () => {
+    const res = await request(playlistApp).get('/api/songs');
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it('GET /api/playlist sem deviceId deve retornar 400', async () => {
+    const res = await request(playlistApp).get('/api/playlist');
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('POST /api/playlist com deviceId deve adicionar faixa', async () => {
+    const res = await request(playlistApp)
+      .post('/api/playlist?deviceId=test123')
+      .send({ title: 'Nova Música', artist: 'Artista' });
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toHaveProperty('id');
+  });
+
+  it('DELETE /api/playlist/:id com deviceId deve remover', async () => {
+    const res = await request(playlistApp).delete(
+      '/api/playlist/mocked-id?deviceId=test123',
+    );
+    expect(res.statusCode).toBe(204);
+  });
+
+  it('PUT /api/playlist/reorder deve atualizar a ordem', async () => {
+    const res = await request(playlistApp)
+      .put('/api/playlist/reorder?deviceId=test123')
+      .send({
+        playlist: [{ id: 'abc123', title: 'Nova', artist: 'Art' }],
+      });
+    expect(res.statusCode).toBe(200);
+  });
+});

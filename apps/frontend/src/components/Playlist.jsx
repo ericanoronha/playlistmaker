@@ -12,15 +12,17 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AudioPlayer from './AudioPlayer';
+import { getDeviceId } from '../hooks/useDeviceId';
 
 const Playlist = () => {
   const [playlist, setPlaylist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentTrack, setCurrentTrack] = useState(null);
+  const deviceId = getDeviceId();
 
   const fetchPlaylist = useCallback(() => {
     setLoading(true);
-    fetch('/api/playlist')
+    fetch(`/api/playlist?deviceId=${deviceId}`)
       .then((res) => res.json())
       .then((data) => {
         setPlaylist(data);
@@ -30,7 +32,7 @@ const Playlist = () => {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [deviceId]);
 
   useEffect(() => {
     fetchPlaylist();
@@ -46,7 +48,7 @@ const Playlist = () => {
 
   const handleRemove = (id) => {
     setLoading(true);
-    fetch(`/api/playlist/${id}`, { method: 'DELETE' })
+    fetch(`/api/playlist/${id}?deviceId=${deviceId}`, { method: 'DELETE' })
       .then((res) => {
         if (res.ok) {
           fetchPlaylist();
@@ -64,7 +66,7 @@ const Playlist = () => {
     const [moved] = reordered.splice(result.source.index, 1);
     reordered.splice(result.destination.index, 0, moved);
     setPlaylist(reordered);
-    // TODO: enviar nova ordem ao backend (via PATCH/PUT)
+    // TODO: enviar nova ordem ao backend (via PATCH/PUT com deviceId)
   };
 
   const handlePlay = (song) => {
