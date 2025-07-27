@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -6,119 +6,178 @@ import {
   Paper,
   Stack,
   Chip,
+  Tooltip,
+  CircularProgress,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ReactPlayer from 'react-player';
 import {
   DragDropContext,
   Droppable,
   Draggable,
 } from '@hello-pangea/dnd';
+import AudioPlayer from './AudioPlayer';
 
 const Playlist = () => {
   const [playlist, setPlaylist] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentTrack, setCurrentTrack] = useState(null);
 
-  useEffect(() => {
+  const fetchPlaylist = useCallback(() => {
+    setLoading(true);
     fetch('/api/playlist')
       .then((res) => res.json())
-      .then(setPlaylist)
-      .catch(console.error);
+      .then((data) => {
+        setPlaylist(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchPlaylist();
+  }, [fetchPlaylist]);
+
+  // Suporte a evento global de troca de faixa
+  useEffect(() => {
+    const listener = (e) => {
+      setCurrentTrack(e.detail);
+    };
+    window.addEventListener('playTrack', listener);
+    return () => window.removeEventListener('playTrack', listener);
   }, []);
 
   const handleRemove = (id) => {
+    setLoading(true);
     fetch(`/api/playlist/${id}`, { method: 'DELETE' })
       .then((res) => {
         if (res.ok) {
-          setPlaylist((prev) => prev.filter((item) => item.id !== id));
+          fetchPlaylist();
         }
       })
-      .catch(console.error);
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   };
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
-    const updated = Array.from(playlist);
-    const [moved] = updated.splice(result.source.index, 1);
-    updated.splice(result.destination.index, 0, moved);
-    setPlaylist(updated);
+    const reordered = Array.from(playlist);
+    const [moved] = reordered.splice(result.source.index, 1);
+    reordered.splice(result.destination.index, 0, moved);
+    setPlaylist(reordered);
+    // opcional: persistência da nova ordem via API
+  };
+
+  const handlePlay = (song) => {
+    setCurrentTrack(song);
   };
 
   return (
-    <Box>
-      {playlist.length === 0 ? (
-        <Typography variant="body2">Nenhuma música na playlist.</Typography>
+    <Box
+      role="region"
+      aria-label="Playlist de músicas"
+      height="100%"
+      overflow="auto"
+      position="relative"
+      pb="100px"
+    >
+      {loading ? (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
+      ) : playlist.length === 0 ? (
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          Nenhuma música na playlist.
+        </Typography>
       ) : (
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="playlist">
-            {(provided) => (
-              <Stack
-                spacing={2}
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {playlist.map((song, index) => (
-                  <Draggable key={song.id} draggableId={song.id} index={index}>
-                    {(provided) => (
-                      <Paper
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          p: 2,
-                        }}
-                      >
-                        <Box>
-                          <Typography variant="subtitle1" fontWeight="bold">
-                            {song.title} — {song.artist}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {song.novela || 'Novela não informada'}
-                          </Typography>
-                          <Chip
-                            label={song.tipo}
-                            color={song.tipo === 'Internacional' ? 'default' : 'success'}
-                            size="small"
-                            sx={{ mt: 1 }}
-                          />
-                        </Box>
-                        <Box display="flex" alignItems="center">
-                          {song.audio && (
-                            <ReactPlayer
-                              url={song.audio}
-                              playing={false}
-                              controls
-                              width="200px"
-                              height="30px"
-                              config={{
-                                file: {
-                                  attributes: {
-                                    controlsList: 'nodownload',
-                                  },
-                                },
+        <>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="playlist">
+              {(provided) => (
+                <Stack
+                  spacing={2}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {playlist.map((song, index) => (
+                    <Draggable key={song.id} draggableId={song.id} index={index}>
+                      {(provided, snapshot) => (
+                        <Paper
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          elevation={snapshot.isDragging ? 6 : 1}
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            p: 2,
+                            transition: 'background 0.3s',
+                            backgroundColor: snapshot.isDragging ? 'grey.800' : 'background.paper',
+                          }}
+                          aria-label={`Faixa ${song.title} de ${song.artist}`}
+                        >
+                          <Box
+                            onClick={() => handlePlay(song)}
+                            sx={{ cursor: 'pointer', maxWidth: 'calc(100% - 40px)' }}
+                          >
+                            <Typography
+                              variant="subtitle1"
+                              fontWeight="bold"
+                              noWrap
+                              title={`${song.title} — ${song.artist}`}
+                            >
+                              {song.title} — {song.artist}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              noWrap
+                              title={song.novela || 'Novela não informada'}
+                            >
+                              {song.novela || 'Novela não informada'}
+                            </Typography>
+                            <Chip
+                              label={song.tipo}
+                              size="small"
+                              sx={{
+                                mt: 1,
+                                backgroundColor: song.tipo === 'Internacional' ? '#FD7D23' : 'success.main',
+                                color: '#fff',
                               }}
                             />
-                          )}
-                          <IconButton
-                            edge="end"
-                            color="error"
-                            onClick={() => handleRemove(song.id)}
-                            aria-label="Remover da Playlist"
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </Box>
-                      </Paper>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </Stack>
-            )}
-          </Droppable>
-        </DragDropContext>
+                          </Box>
+
+                          <Tooltip title="Remover da playlist">
+                            <IconButton
+                              edge="end"
+                              color="error"
+                              onClick={() => handleRemove(song.id)}
+                              aria-label={`Remover ${song.title} da playlist`}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </Paper>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </Stack>
+              )}
+            </Droppable>
+          </DragDropContext>
+
+          {currentTrack && (
+            <Suspense fallback={<Box textAlign="center" py={2}>Carregando player...</Box>}>
+              <AudioPlayer track={currentTrack} playlist={playlist} />
+            </Suspense>
+          )}
+        </>
       )}
     </Box>
   );

@@ -1,22 +1,68 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Box,
   Typography,
   TextField,
   Chip,
+  IconButton,
+  CircularProgress,
 } from '@mui/material';
 import { DataGrid, ptBR } from '@mui/x-data-grid';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const SongLibrary = () => {
   const [songs, setSongs] = useState([]);
   const [filter, setFilter] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [addingId, setAddingId] = useState(null);
+  const [favorites, setFavorites] = useState([]);
 
-  useEffect(() => {
+  const fetchSongs = useCallback(() => {
+    setLoading(true);
     fetch('/api/songs')
       .then((res) => res.json())
-      .then(setSongs)
+      .then((data) => {
+        setSongs(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
+
+  const fetchPlaylist = useCallback(() => {
+    fetch('/api/playlist')
+      .then((res) => res.json())
+      .then((data) => {
+        const favIds = data.map((item) => item.id);
+        setFavorites(favIds);
+      })
       .catch(console.error);
   }, []);
+
+  useEffect(() => {
+    fetchSongs();
+    fetchPlaylist();
+  }, [fetchSongs, fetchPlaylist]);
+
+  const handleAddToPlaylist = (song) => {
+    setAddingId(song.id);
+    fetch('/api/playlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(song),
+    })
+      .then((res) => {
+        if (res.ok) {
+          // Trigger refresh in Playlist component
+          window.dispatchEvent(new CustomEvent('playTrack', { detail: song }));
+          fetchPlaylist();
+        }
+      })
+      .finally(() => setAddingId(null));
+  };
 
   const filteredSongs = songs.filter((song) => {
     const titleMatch = song.title?.toLowerCase().includes(filter.toLowerCase());
@@ -56,10 +102,38 @@ const SongLibrary = () => {
         />
       ),
     },
+    {
+      field: 'favoritar',
+      headerName: 'Favoritar',
+      sortable: false,
+      flex: 0.5,
+      align: 'center',
+      renderCell: ({ row }) => {
+        const isFav = favorites.includes(row.id);
+        return (
+          <IconButton
+            aria-label={
+              isFav ? `Já adicionado: ${row.title}` : `Adicionar à playlist: ${row.title}`
+            }
+            onClick={() => handleAddToPlaylist(row)}
+            disabled={addingId === row.id || isFav}
+            color={isFav ? 'error' : 'default'}
+          >
+            {addingId === row.id ? (
+              <CircularProgress size={20} />
+            ) : isFav ? (
+              <FavoriteIcon />
+            ) : (
+              <FavoriteBorderIcon />
+            )}
+          </IconButton>
+        );
+      },
+    },
   ];
 
   return (
-    <Box sx={{ flex: 1 }}>
+    <Box height="100%" display="flex" flexDirection="column">
       <TextField
         label="Busque pelo nome da música ou nome da novela"
         variant="outlined"
@@ -70,14 +144,15 @@ const SongLibrary = () => {
         sx={{ mb: 2 }}
       />
 
-      <Box sx={{ height: 400 }}>
+      <Box flex={1} minHeight={0}>
         <DataGrid
-          rows={filteredSongs.map((row, index) => ({ id: index, ...row }))}
+          rows={filteredSongs.map((row, index) => ({ id: row.id || index, ...row }))}
           columns={columns}
           pageSize={100}
           rowsPerPageOptions={[100]}
           disableRowSelectionOnClick
           disableColumnMenu
+          loading={loading}
           localeText={{
             ...ptBR.components.MuiDataGrid.defaultProps.localeText,
             noRowsLabel: 'Nenhuma música encontrada',
@@ -87,6 +162,7 @@ const SongLibrary = () => {
             backgroundColor: 'background.paper',
             '& .MuiDataGrid-columnHeaderDraggableContainer': {
               justifyContent: 'center',
+              color: '#B0B0B0',
             },
           }}
         />
