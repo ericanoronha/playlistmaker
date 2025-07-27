@@ -10,11 +10,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-} from '@hello-pangea/dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AudioPlayer from './AudioPlayer';
 
 const Playlist = () => {
@@ -40,7 +36,6 @@ const Playlist = () => {
     fetchPlaylist();
   }, [fetchPlaylist]);
 
-  // Suporte a evento global de troca de faixa
   useEffect(() => {
     const listener = (e) => {
       setCurrentTrack(e.detail);
@@ -69,7 +64,7 @@ const Playlist = () => {
     const [moved] = reordered.splice(result.source.index, 1);
     reordered.splice(result.destination.index, 0, moved);
     setPlaylist(reordered);
-    // opcional: persistência da nova ordem via API
+    // TODO: enviar nova ordem ao backend (via PATCH/PUT)
   };
 
   const handlePlay = (song) => {
@@ -104,7 +99,11 @@ const Playlist = () => {
                   {...provided.droppableProps}
                 >
                   {playlist.map((song, index) => (
-                    <Draggable key={song.id} draggableId={song.id} index={index}>
+                    <Draggable
+                      key={song.id}
+                      draggableId={song.id}
+                      index={index}
+                    >
                       {(provided, snapshot) => (
                         <Paper
                           ref={provided.innerRef}
@@ -117,13 +116,18 @@ const Playlist = () => {
                             justifyContent: 'space-between',
                             p: 2,
                             transition: 'background 0.3s',
-                            backgroundColor: snapshot.isDragging ? 'grey.800' : 'background.paper',
+                            backgroundColor: snapshot.isDragging
+                              ? 'grey.800'
+                              : 'background.paper',
                           }}
                           aria-label={`Faixa ${song.title} de ${song.artist}`}
                         >
                           <Box
                             onClick={() => handlePlay(song)}
-                            sx={{ cursor: 'pointer', maxWidth: 'calc(100% - 40px)' }}
+                            sx={{
+                              cursor: 'pointer',
+                              maxWidth: 'calc(100% - 40px)',
+                            }}
                           >
                             <Typography
                               variant="subtitle1"
@@ -146,7 +150,10 @@ const Playlist = () => {
                               size="small"
                               sx={{
                                 mt: 1,
-                                backgroundColor: song.tipo === 'Internacional' ? '#FD7D23' : 'success.main',
+                                backgroundColor:
+                                  song.tipo === 'Internacional'
+                                    ? '#FD7D23'
+                                    : 'success.main',
                                 color: '#fff',
                               }}
                             />
@@ -173,7 +180,13 @@ const Playlist = () => {
           </DragDropContext>
 
           {currentTrack && (
-            <Suspense fallback={<Box textAlign="center" py={2}>Carregando player...</Box>}>
+            <Suspense
+              fallback={
+                <Box textAlign="center" py={2}>
+                  Carregando player...
+                </Box>
+              }
+            >
               <AudioPlayer track={currentTrack} playlist={playlist} />
             </Suspense>
           )}

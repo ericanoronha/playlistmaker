@@ -1,13 +1,9 @@
 import React from 'react';
-import {
-  ThemeProvider,
-  CssBaseline,
-  Typography,
-  Box,
-} from '@mui/material';
+import { ThemeProvider, CssBaseline, Typography, Box } from '@mui/material';
 import theme from './theme';
 import SongLibrary from './components/SongLibrary';
 import Playlist from './components/Playlist';
+import Footer from './components/Footer';
 import './App.css';
 
 const App = () => {
@@ -52,6 +48,8 @@ const App = () => {
           </Box>
         </Box>
       </main>
+
+      <Footer />
     </ThemeProvider>
   );
 };

@@ -22,5 +22,9 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.37.1",
     "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "shaka-player": "^4.15.8",
+    "vite-plugin-pwa": "^1.0.2"
   }
 }
