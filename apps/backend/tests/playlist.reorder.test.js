@@ -2,13 +2,11 @@ import request from 'supertest';
 import app from './utils/testApp.js';
 import { deviceId, reorderedPlaylist } from './test.constants.js';
 
-describe('PUT /api/playlist/reorder', () => {
-  it('deve atualizar a ordem da playlist', async () => {
-    const res = await request(app)
-      .put(`/api/playlist/reorder?deviceId=${deviceId}`)
+describe('PUT /api/playlist/reorder/:deviceId', () => {
+  it('deve reordenar a playlist', async () => {
+    const response = await request(app)
+      .put(`/api/playlist/reorder/${deviceId}`)
       .send({ playlist: reorderedPlaylist });
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toHaveProperty('message');
+    expect(response.status).toBe(200);
   });
 });

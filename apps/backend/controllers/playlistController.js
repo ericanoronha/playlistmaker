@@ -17,7 +17,7 @@ export const getSongs = async (req, res) => {
 };
 
 export const getPlaylist = async (req, res) => {
-  const { deviceId } = req.query;
+  const { deviceId } = req.params;
   if (!deviceId)
     return res.status(400).json({ error: 'Parâmetro deviceId obrigatório' });
 
@@ -31,7 +31,7 @@ export const getPlaylist = async (req, res) => {
 };
 
 export const addTrack = async (req, res) => {
-  const { deviceId } = req.query;
+  const { deviceId } = req.params;
   if (!deviceId)
     return res.status(400).json({ error: 'Parâmetro deviceId obrigatório' });
 
@@ -45,13 +45,12 @@ export const addTrack = async (req, res) => {
 };
 
 export const deleteTrack = async (req, res) => {
-  const { deviceId } = req.query;
-  const { id } = req.params;
+  const { deviceId, trackId } = req.params;
   if (!deviceId)
     return res.status(400).json({ error: 'Parâmetro deviceId obrigatório' });
 
   try {
-    const success = await deleteTrackFromDevice(deviceId, id);
+    const success = await deleteTrackFromDevice(deviceId, trackId);
     if (!success)
       return res.status(404).json({ error: 'Música não encontrada' });
     res.status(204).end();
@@ -62,7 +61,7 @@ export const deleteTrack = async (req, res) => {
 };
 
 export const reorderPlaylist = async (req, res) => {
-  const { deviceId } = req.query;
+  const { deviceId } = req.params;
   const { playlist } = req.body;
   if (!deviceId)
     return res.status(400).json({ error: 'Parâmetro deviceId obrigatório' });

@@ -1,8 +1,9 @@
 export default {
   testEnvironment: 'node',
   transform: {},
+  transformIgnorePatterns: ['/node_modules/(?!supertest)/'],
   moduleNameMapper: {
-    '^firebase/database$': '<rootDir>/tests/__mocks__/firebase/database.js',
+    '^firebase/database$': '<rootDir>/tests/__mocks__/firebase/database.mjs',
   },
   collectCoverage: true,
   collectCoverageFrom: [
@@ -15,6 +16,4 @@ export default {
   resetMocks: true,
   clearMocks: true,
   restoreMocks: true,
-  forceExit: true,
-  maxWorkers: 1,
 };

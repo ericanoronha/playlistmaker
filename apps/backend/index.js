@@ -29,7 +29,8 @@ const __dirname = path.dirname(__filename);
 const publicPath = path.join(__dirname, 'public');
 app.use(express.static(publicPath));
 
-app.use('/api', playlistRoutes);
+// Corrige rota base para incluir /playlist
+app.use('/api/playlist', playlistRoutes);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));

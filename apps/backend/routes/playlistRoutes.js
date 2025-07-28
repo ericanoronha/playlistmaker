@@ -1,6 +1,5 @@
 import express from 'express';
 import {
-  getSongs,
   getPlaylist,
   addTrack,
   deleteTrack,
@@ -9,10 +8,9 @@ import {
 
 const router = express.Router();
 
-router.get('/songs', getSongs);
-router.get('/playlist', getPlaylist);
-router.post('/playlist', addTrack);
-router.delete('/playlist/:id', deleteTrack);
-router.put('/playlist/reorder', reorderPlaylist);
+router.get('/:deviceId', getPlaylist);
+router.post('/:deviceId', addTrack);
+router.delete('/:deviceId/:trackId', deleteTrack);
+router.put('/reorder/:deviceId', reorderPlaylist);
 
 export default router;

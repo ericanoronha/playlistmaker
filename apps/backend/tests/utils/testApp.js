@@ -1,9 +1,8 @@
-import { jest } from '@jest/globals';
+import express from 'express';
+import playlistRoutes from '../../routes/playlistRoutes.js';
 
-await jest.unstable_mockModule(
-  'firebase/database',
-  () => import('../__mocks__/firebase/database.js')
-);
+const app = express();
+app.use(express.json());
+app.use('/api/playlist', playlistRoutes);
 
-const app = (await import('../../index.js')).default;
 export default app;
