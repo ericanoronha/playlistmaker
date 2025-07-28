@@ -29,8 +29,7 @@ npm  run  start:backend
 docker-compose  up  --build
 ```
 
-Acesse o app em: [http://localhost:5173](http://localhost:5173)
-O app também está disponível por [https://playlistmaker.onrender.com](aqui)
+Acesse o app em: [http://localhost:5173](http://localhost:5173).
 
 ---
 
