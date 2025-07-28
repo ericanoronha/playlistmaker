@@ -47,7 +47,7 @@ const App = () => {
         </Typography>
       </header>
 
-      <main style={{ paddingBottom: '96px' }}>
+      <main>
         <Box
           display="flex"
           flexDirection={isMobile ? 'column' : 'row'}
@@ -63,7 +63,7 @@ const App = () => {
           </Box>
 
           <Box flex={1} minHeight={0} overflow="auto">
-            <Typography variant="h5" gutterBottom fontWeight="bold">
+            <Typography variant="h5" gutterBottom fontWeight="bold" pb={2}>
               Favoritas
             </Typography>
             <Playlist />

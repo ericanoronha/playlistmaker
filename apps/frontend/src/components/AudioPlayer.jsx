@@ -5,9 +5,10 @@ import { PlayArrow, Pause, VolumeUp, VolumeOff, SkipPrevious, SkipNext } from '@
 
 const AudioPlayer = ({ track, playlist }) => {
   const playerRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [volume, setVolume] = useState(0.8);
   const [progress, setProgress] = useState(0);
+
   const currentIndex = playlist.findIndex((s) => s.id === track.id);
 
   useEffect(() => {
@@ -17,21 +18,29 @@ const AudioPlayer = ({ track, playlist }) => {
 
   const handleProgress = (state) => setProgress(state.playedSeconds);
 
-  const togglePlay = () => {
-    setIsPlaying((prev) => !prev);
-  };
+  const togglePlay = () => setIsPlaying((prev) => !prev);
 
   const handleNext = () => {
     const next = playlist[currentIndex + 1];
     if (next) window.dispatchEvent(new CustomEvent('playTrack', { detail: next }));
   };
+
   const handlePrevious = () => {
     const prev = playlist[currentIndex - 1];
     if (prev) window.dispatchEvent(new CustomEvent('playTrack', { detail: prev }));
   };
 
   return (
-    <Box position="fixed" bottom={0} left={0} right={0} bgcolor="#1e1e1e" p={2} borderTop="1px solid #333" zIndex={999}>
+    <Box
+      position="fixed"
+      bottom="48px"
+      left={0}
+      right={0}
+      bgcolor="#1e1e1e"
+      p={2}
+      borderTop="1px solid #333"
+      zIndex={999}
+    >
       <ReactPlayer
         ref={playerRef}
         url={track.audio}
