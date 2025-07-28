@@ -1,5 +1,5 @@
-import React from 'react';
-import { ThemeProvider, CssBaseline, Typography, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { ThemeProvider, CssBaseline, Typography, Box, useMediaQuery, CircularProgress } from '@mui/material';
 import theme from './theme';
 import SongLibrary from './components/SongLibrary';
 import Playlist from './components/Playlist';
@@ -8,6 +8,31 @@ import Snackbar from './components/Snackbar';
 import './App.css';
 
 const App = () => {
+  const isMobile = useMediaQuery('(max-width:1200px)');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000); // Simula delay inicial
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+          bgcolor="background.default"
+        >
+          <CircularProgress />
+        </Box>
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -22,30 +47,26 @@ const App = () => {
         </Typography>
       </header>
 
-      <main>
+      <main style={{ paddingBottom: '96px' }}>
         <Box
-          display="grid"
-          gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}
+          display="flex"
+          flexDirection={isMobile ? 'column' : 'row'}
           gap={4}
-          height="calc(100vh - 120px)"
+          height="calc(100vh - 200px)"
           px={4}
         >
-          <Box display="flex" flexDirection="column" height="100%">
+          <Box flex={2} minHeight={0} overflow="auto">
             <Typography variant="h5" gutterBottom fontWeight="bold">
               Trilhas sonoras
             </Typography>
-            <Box flex={1} overflow="auto">
-              <SongLibrary />
-            </Box>
+            <SongLibrary onPlaylistChange={() => {}} />
           </Box>
 
-          <Box display="flex" flexDirection="column" height="100%">
+          <Box flex={1} minHeight={0} overflow="auto">
             <Typography variant="h5" gutterBottom fontWeight="bold">
               Favoritas
             </Typography>
-            <Box flex={1} overflow="auto">
-              <Playlist />
-            </Box>
+            <Playlist />
           </Box>
         </Box>
       </main>

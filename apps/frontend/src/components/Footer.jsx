@@ -14,7 +14,7 @@ const Footer = () => {
   };
 
   return (
-    <Box textAlign="center" py={2}>
+    <Box component="footer" textAlign="center" py={2}>
       <Typography variant="body2" gutterBottom>
         Feito com ♡ por @ericanoronha
       </Typography>

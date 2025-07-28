@@ -4,7 +4,7 @@ import {
   addTrack,
   deleteTrack,
   reorderPlaylist,
-} from '../controllers/playlistController.js';
+} from '../../controllers/playlistController.js';
 
 const router = express.Router();
 

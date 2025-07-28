@@ -16,7 +16,8 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '/api'),
+        // Corrigido: não reescreve a rota
+        rewrite: (path) => path, 
       },
     },
   },
@@ -32,7 +33,7 @@ export default defineConfig({
       '@emotion/react',
       '@emotion/styled',
       'react',
-      'react-dom'
+      'react-dom',
     ],
   },
 });

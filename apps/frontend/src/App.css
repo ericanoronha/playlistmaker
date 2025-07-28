@@ -5,7 +5,6 @@ body {
   background-color: #121212;
   color: #fff;
   height: 100vh;
-  overflow: hidden;
 }
 
 header h1::before {
@@ -41,7 +40,7 @@ input {
 }
 
 .remove-button {
-  color: #f44336;
+  color: #eee;
 }
 
 .MuiDataGrid-columnHeaderDraggableContainer svg {
@@ -57,7 +56,6 @@ input {
   height: 100%;
 }
 
-/* Scrollbar personalizada */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -70,4 +68,25 @@ input {
 
 ::-webkit-scrollbar-track {
   background-color: transparent;
+}
+
+footer button {
+  text-transform: uppercase;
+}
+
+footer p {
+  text-transform: lowercase;
+}
+
+footer {
+  font-size: 0.75rem;
+  color: #aaa;
+  padding: 12px;
+  text-align: center;
+}
+
+@media (max-width: 1200px) {
+  main {
+    flex-direction: column;
+  }
 }

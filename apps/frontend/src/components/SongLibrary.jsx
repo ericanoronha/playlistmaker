@@ -39,7 +39,7 @@ const SongLibrary = () => {
   }, []);
 
   const fetchPlaylist = useCallback(() => {
-    fetch(`/api/playlist?deviceId=${deviceId}`)
+    fetch(`/api/playlist/${encodeURIComponent(deviceId)}`)
       .then((res) => res.json())
       .then((data) => {
         const favIds = data.map((item) => item.id);
@@ -56,7 +56,7 @@ const SongLibrary = () => {
 
   const handleAddToPlaylist = (song) => {
     setAddingId(song.id);
-    fetch(`/api/playlist?deviceId=${deviceId}`, {
+    fetch(`/api/playlist/${encodeURIComponent(deviceId)}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(song),
@@ -70,7 +70,9 @@ const SongLibrary = () => {
           throw new Error('Erro ao adicionar');
         }
       })
-      .catch(() => setSnackbar({ open: true, message: 'Erro ao adicionar à playlist', severity: 'error' }))
+      .catch(() =>
+        setSnackbar({ open: true, message: 'Erro ao adicionar à playlist', severity: 'error' })
+      )
       .finally(() => setAddingId(null));
   };
 
@@ -118,7 +120,7 @@ const SongLibrary = () => {
     {
       field: 'favoritar',
       headerName: 'Favoritar',
-      sortable: true,
+      sortable: false,
       flex: 0.5,
       align: 'center',
       renderCell: ({ row }) => {
@@ -154,7 +156,30 @@ const SongLibrary = () => {
         size="small"
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
-        sx={{ mb: 2 }}
+        sx={{
+          mb: 2,
+          '& label.Mui-focused': {
+            color: '#eee',
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#666',
+            },
+            '&:hover fieldset': {
+              borderColor: '#888',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#eee',
+            },
+          },
+          input: {
+            color: '#fff',
+          },
+        }}
+        InputLabelProps={{
+          shrink: true,
+          style: { color: '#aaa', backgroundColor: '#1e1e1e', padding: '0 4px' },
+        }}
       />
 
       <Box flex={1} minHeight={0}>

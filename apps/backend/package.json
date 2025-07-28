@@ -4,7 +4,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "nodemon server.js",
     "start": "node server.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand --coverage",
     "test:clean": "jest --clearCache && rimraf coverage && npm run test",
