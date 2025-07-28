@@ -4,8 +4,7 @@ import { ref as dbRef, get, set, remove, push } from 'firebase/database';
 export const getAllSongs = async () => {
   const snapshot = await db.ref('trilhas-de-novelas').once('value');
   const data = snapshot.val();
-  if (!data) return [];
-  return Object.values(data);
+  return data ? Object.values(data) : [];
 };
 
 export const getPlaylistByDevice = async (deviceId) => {
