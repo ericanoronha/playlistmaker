@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense, useCallback } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import {
   Box,
   Typography,
@@ -12,38 +12,22 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AudioPlayer from './AudioPlayer';
-import { getDeviceId } from '../utils/deviceId';
-import { getCachedPlaylist, setCachedPlaylist } from '../utils/cacheUtils';
 import Snackbar from './Snackbar';
+import { usePlaylist } from '../context/PlaylistContext';
 
 const Playlist = () => {
-  const [playlist, setPlaylist] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [currentTrack, setCurrentTrack] = useState(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
-  const deviceId = getDeviceId();
-
-  const fetchPlaylist = useCallback(() => {
-    setLoading(true);
-    const cached = getCachedPlaylist(deviceId);
-    if (cached) {
-      setPlaylist(cached);
-      setLoading(false);
-    } else {
-      fetch(`/api/playlist?deviceId=${deviceId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setPlaylist(data);
-          setCachedPlaylist(deviceId, data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error(err);
-          setSnackbar({ open: true, message: 'Erro ao carregar a playlist', severity: 'error' });
-          setLoading(false);
-        });
-    }
-  }, [deviceId]);
+  const {
+    playlist,
+    loading,
+    error,
+    currentTrack,
+    fetchPlaylist,
+    removeTrack,
+    reorderPlaylist,
+    setCurrentTrack,
+    snackbar,
+    setSnackbar,
+  } = usePlaylist();
 
   useEffect(() => {
     fetchPlaylist();
@@ -55,31 +39,23 @@ const Playlist = () => {
     };
     window.addEventListener('playTrack', listener);
     return () => window.removeEventListener('playTrack', listener);
-  }, []);
+  }, [setCurrentTrack]);
 
-  const handleRemove = (id) => {
-    setLoading(true);
-    fetch(`/api/playlist/${id}?deviceId=${deviceId}`, { method: 'DELETE' })
-      .then((res) => {
-        if (res.ok) {
-          fetchPlaylist();
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setSnackbar({ open: true, message: 'Erro ao remover faixa', severity: 'error' });
-        setLoading(false);
+  const handleRemove = async (id) => {
+    try {
+      await removeTrack(id);
+    } catch {
+      setSnackbar({
+        open: true,
+        message: 'Erro ao remover faixa',
+        severity: 'error',
       });
+    }
   };
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
-    const reordered = Array.from(playlist);
-    const [moved] = reordered.splice(result.source.index, 1);
-    reordered.splice(result.destination.index, 0, moved);
-    setPlaylist(reordered);
-    setCachedPlaylist(deviceId, reordered);
-    // TODO: enviar nova ordem ao backend (via PATCH/PUT com deviceId)
+    reorderPlaylist(result.source.index, result.destination.index);
   };
 
   const handlePlay = (song) => {
@@ -99,6 +75,10 @@ const Playlist = () => {
         <Box display="flex" justifyContent="center" mt={4}>
           <CircularProgress />
         </Box>
+      ) : error ? (
+        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+          {error}
+        </Typography>
       ) : playlist.length === 0 ? (
         <Typography variant="body2" sx={{ mt: 2 }}>
           Nenhuma música na playlist.

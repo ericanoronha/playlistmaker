@@ -10,8 +10,7 @@ import {
 import { DataGrid, ptBR } from '@mui/x-data-grid';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { getDeviceId } from '../utils/deviceId';
-import { getCachedPlaylist, setCachedPlaylist } from '../utils/cacheUtils';
+import { usePlaylist } from '../context/PlaylistContext';
 import Snackbar from './Snackbar';
 
 const SongLibrary = () => {
@@ -19,10 +18,14 @@ const SongLibrary = () => {
   const [filter, setFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [addingId, setAddingId] = useState(null);
-  const [favorites, setFavorites] = useState([]);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
-  const deviceId = getDeviceId();
+  const {
+    playlist,
+    addTrack,
+    fetchPlaylist,
+    snackbar,
+    setSnackbar,
+  } = usePlaylist();
 
   const fetchSongs = useCallback(() => {
     setLoading(true);
@@ -38,17 +41,6 @@ const SongLibrary = () => {
       });
   }, []);
 
-  const fetchPlaylist = useCallback(() => {
-    fetch(`/api/playlist/${encodeURIComponent(deviceId)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const favIds = data.map((item) => item.id);
-        setFavorites(favIds);
-        setCachedPlaylist(deviceId, data);
-      })
-      .catch(console.error);
-  }, [deviceId]);
-
   useEffect(() => {
     fetchSongs();
     fetchPlaylist();
@@ -56,26 +48,17 @@ const SongLibrary = () => {
 
   const handleAddToPlaylist = (song) => {
     setAddingId(song.id);
-    fetch(`/api/playlist/${encodeURIComponent(deviceId)}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(song),
-    })
-      .then((res) => {
-        if (res.ok) {
-          window.dispatchEvent(new CustomEvent('playTrack', { detail: song }));
-          fetchPlaylist();
-          setSnackbar({ open: true, message: 'Adicionado à playlist!', severity: 'success' });
-        } else {
-          throw new Error('Erro ao adicionar');
-        }
+    addTrack(song)
+      .then(() => {
+        setSnackbar({ open: true, message: 'Adicionado à playlist!', severity: 'success' });
       })
-      .catch(() =>
-        setSnackbar({ open: true, message: 'Erro ao adicionar à playlist', severity: 'error' })
-      )
+      .catch(() => {
+        setSnackbar({ open: true, message: 'Erro ao adicionar à playlist', severity: 'error' });
+      })
       .finally(() => setAddingId(null));
   };
 
+  const favorites = playlist.map((item) => item.id);
   const filteredSongs = songs.filter((song) => {
     const titleMatch = song.title?.toLowerCase().includes(filter.toLowerCase());
     const novelaMatch = song.novela?.toLowerCase().includes(filter.toLowerCase());
@@ -83,24 +66,9 @@ const SongLibrary = () => {
   });
 
   const columns = [
-    {
-      field: 'title',
-      headerName: 'Faixa',
-      flex: 1,
-      sortable: true,
-    },
-    {
-      field: 'artist',
-      headerName: 'Artista',
-      flex: 1,
-      sortable: true,
-    },
-    {
-      field: 'novela',
-      headerName: 'Novela',
-      flex: 1,
-      sortable: true,
-    },
+    { field: 'title', headerName: 'Faixa', flex: 1, sortable: true },
+    { field: 'artist', headerName: 'Artista', flex: 1, sortable: true },
+    { field: 'novela', headerName: 'Novela', flex: 1, sortable: true },
     {
       field: 'tipo',
       headerName: 'Tipo',
@@ -127,20 +95,12 @@ const SongLibrary = () => {
         const isFav = favorites.includes(row.id);
         return (
           <IconButton
-            aria-label={
-              isFav ? `Já adicionado: ${row.title}` : `Adicionar à playlist: ${row.title}`
-            }
+            aria-label={isFav ? `Já adicionado: ${row.title}` : `Adicionar à playlist: ${row.title}`}
             onClick={() => handleAddToPlaylist(row)}
             disabled={addingId === row.id || isFav}
             color={isFav ? 'error' : 'default'}
           >
-            {addingId === row.id ? (
-              <CircularProgress size={20} />
-            ) : isFav ? (
-              <FavoriteIcon />
-            ) : (
-              <FavoriteBorderIcon />
-            )}
+            {addingId === row.id ? <CircularProgress size={20} /> : isFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
         );
       },
@@ -158,23 +118,13 @@ const SongLibrary = () => {
         onChange={(e) => setFilter(e.target.value)}
         sx={{
           mb: 2,
-          '& label.Mui-focused': {
-            color: '#eee',
-          },
+          '& label.Mui-focused': { color: '#eee' },
           '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              borderColor: '#666',
-            },
-            '&:hover fieldset': {
-              borderColor: '#888',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#eee',
-            },
+            '& fieldset': { borderColor: '#666' },
+            '&:hover fieldset': { borderColor: '#888' },
+            '&.Mui-focused fieldset': { borderColor: '#eee' },
           },
-          input: {
-            color: '#fff',
-          },
+          input: { color: '#fff' },
         }}
         InputLabelProps={{
           shrink: true,

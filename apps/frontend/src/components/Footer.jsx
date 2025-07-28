@@ -6,33 +6,24 @@ import { getDeviceId } from '../utils/deviceId';
 
 const Footer = () => {
   const deviceId = getDeviceId();
-  const cached = getCachedPlaylist(deviceId);
-
+  const cache = getCachedPlaylist(deviceId) || [];
   const handleClearCache = () => {
     clearDeviceCache();
     window.location.reload();
   };
 
   return (
-    <Box component="footer" textAlign="center" py={2}>
-      <Typography variant="body2" gutterBottom>
-        Feito com ♡ por @ericanoronha
-      </Typography>
-      <Link
-        component="button"
-        variant="body2"
-        onClick={handleClearCache}
-        underline="hover"
-      >
-        Limpar cache local
-      </Link>
-      <DiagnosticsDrawer
-        diagnostics={{
-          deviceId,
-          cache: JSON.stringify(cached, null, 2),
-        }}
-      />
-    </Box>
+    <footer>
+      <Box textAlign="center" py={2} sx={{ background: 'linear-gradient(45deg, black, rgba(0,0,0,0.6))' }}>
+        <Typography variant="body2" gutterBottom>
+          Feito com ♡ por @ericanoronha
+        </Typography>
+        <Link component="button" variant="body2" onClick={handleClearCache} underline="hover">
+          Limpar cache local
+        </Link>
+        <DiagnosticsDrawer diagnostics={{ deviceId, cache }} />
+      </Box>
+    </footer>
   );
 };
 
