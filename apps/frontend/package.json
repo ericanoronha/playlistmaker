@@ -7,7 +7,9 @@
     "dev": "vite --mode development",
     "build": "vite build",
     "start": "vite",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

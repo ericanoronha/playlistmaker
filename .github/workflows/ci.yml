@@ -7,11 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .
 
     steps:
       - name: Checkout code
@@ -35,8 +32,12 @@ jobs:
 
       - name: Run backend tests with coverage
         run: |
-          npm run test:coverage || echo "Coverage check skipped"
-          npx istanbul check-coverage --branches 70 --functions 70 --lines 70 --statements 70 || echo "Coverage thresholds not met"
+          if npm run | grep -q 'test:coverage'; then
+            npm run test:coverage
+            npx istanbul check-coverage --branches 70 --functions 70 --lines 70 --statements 70
+          else
+            echo "Coverage check skipped"
+          fi
         working-directory: apps/backend
 
       - name: Build frontend
@@ -45,7 +46,11 @@ jobs:
 
       - name: Deploy to Render
         if: github.ref == 'refs/heads/main'
-        run: |
-          curl -X POST "$RENDER_DEPLOY_HOOK_URL"
         env:
           RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "Missing RENDER_DEPLOY_HOOK_URL secret"
+            exit 1
+          fi
+          curl -X POST "$RENDER_DEPLOY_HOOK_URL"
