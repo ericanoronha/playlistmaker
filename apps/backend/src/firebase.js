@@ -10,14 +10,11 @@ config();
 let credentials;
 
 try {
-  // Primeiro tenta a variável de ambiente
   credentials = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
 } catch (err) {
-  // Fallback para ler o arquivo local, a partir de apps/backend/src/
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
 
-  // Caminho relativo correto baseado na estrutura que você mostrou
   const localPath = path.resolve(__dirname, '../firebase-service-account.json');
 
   credentials = JSON.parse(readFileSync(localPath, 'utf8'));

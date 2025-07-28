@@ -4,10 +4,10 @@ const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#1db954', // tom inspirado no verde Spotify
+      main: '#eee',
     },
     secondary: {
-      main: '#f48fb1',
+      main: '#D4D4D4',
     },
     background: {
       default: '#121212',
@@ -74,7 +74,7 @@ const theme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          color: '#f44336',
+          color: '#eee',
         },
       },
     },

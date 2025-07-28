@@ -16,8 +16,24 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '/api'),
+        // Corrigido: não reescreve a rota
+        rewrite: (path) => path, 
       },
     },
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+  },
+  optimizeDeps: {
+    include: [
+      '@mui/material',
+      '@mui/icons-material',
+      '@mui/system',
+      '@emotion/react',
+      '@emotion/styled',
+      'react',
+      'react-dom',
+    ],
   },
 });
