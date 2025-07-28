@@ -1,3 +1,4 @@
+# Fase de build
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -20,6 +21,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY --from=builder /app/apps/backend ./
+
 COPY --from=builder /app/apps/frontend/dist ./public
 
 ENV NODE_ENV=production
