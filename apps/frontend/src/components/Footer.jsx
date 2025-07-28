@@ -1,8 +1,8 @@
 import React from 'react';
 import { Typography, Box, Link } from '@mui/material';
-import DiagnosticsDrawer from '../components/DiagnosticsDrawer';
+import DiagnosticsDrawer from './DiagnosticsDrawer';
 import { getCachedPlaylist, clearDeviceCache } from '../utils/cacheUtils';
-import { getDeviceId } from '../hooks/useDeviceId';
+import { getDeviceId } from '../utils/deviceId';
 
 const Footer = () => {
   const deviceId = getDeviceId();
@@ -26,7 +26,6 @@ const Footer = () => {
       >
         Limpar cache local
       </Link>
-
       <DiagnosticsDrawer
         diagnostics={{
           deviceId,

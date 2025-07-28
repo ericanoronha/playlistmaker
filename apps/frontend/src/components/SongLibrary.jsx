@@ -10,6 +10,9 @@ import {
 import { DataGrid, ptBR } from '@mui/x-data-grid';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { getDeviceId } from '../utils/deviceId';
+import { getCachedPlaylist, setCachedPlaylist } from '../utils/cacheUtils';
+import Snackbar from './Snackbar';
 
 const SongLibrary = () => {
   const [songs, setSongs] = useState([]);
@@ -17,6 +20,9 @@ const SongLibrary = () => {
   const [loading, setLoading] = useState(true);
   const [addingId, setAddingId] = useState(null);
   const [favorites, setFavorites] = useState([]);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+
+  const deviceId = getDeviceId();
 
   const fetchSongs = useCallback(() => {
     setLoading(true);
@@ -33,14 +39,15 @@ const SongLibrary = () => {
   }, []);
 
   const fetchPlaylist = useCallback(() => {
-    fetch('/api/playlist')
+    fetch(`/api/playlist?deviceId=${deviceId}`)
       .then((res) => res.json())
       .then((data) => {
         const favIds = data.map((item) => item.id);
         setFavorites(favIds);
+        setCachedPlaylist(deviceId, data);
       })
       .catch(console.error);
-  }, []);
+  }, [deviceId]);
 
   useEffect(() => {
     fetchSongs();
@@ -49,18 +56,21 @@ const SongLibrary = () => {
 
   const handleAddToPlaylist = (song) => {
     setAddingId(song.id);
-    fetch('/api/playlist', {
+    fetch(`/api/playlist?deviceId=${deviceId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(song),
     })
       .then((res) => {
         if (res.ok) {
-          // Trigger refresh in Playlist component
           window.dispatchEvent(new CustomEvent('playTrack', { detail: song }));
           fetchPlaylist();
+          setSnackbar({ open: true, message: 'Adicionado à playlist!', severity: 'success' });
+        } else {
+          throw new Error('Erro ao adicionar');
         }
       })
+      .catch(() => setSnackbar({ open: true, message: 'Erro ao adicionar à playlist', severity: 'error' }))
       .finally(() => setAddingId(null));
   };
 
@@ -93,11 +103,14 @@ const SongLibrary = () => {
       field: 'tipo',
       headerName: 'Tipo',
       flex: 0.5,
-      sortable: false,
+      sortable: true,
       renderCell: (params) => (
         <Chip
-          label={params.value || 'Nacional'}
-          color={params.value === 'Internacional' ? 'default' : 'success'}
+          label={params.value || 'nacional'}
+          sx={{
+            backgroundColor: params.value === 'internacional' ? '#FD7D23' : 'success.main',
+            color: '#fff',
+          }}
           size="small"
         />
       ),
@@ -105,7 +118,7 @@ const SongLibrary = () => {
     {
       field: 'favoritar',
       headerName: 'Favoritar',
-      sortable: false,
+      sortable: true,
       flex: 0.5,
       align: 'center',
       renderCell: ({ row }) => {
@@ -135,7 +148,7 @@ const SongLibrary = () => {
   return (
     <Box height="100%" display="flex" flexDirection="column">
       <TextField
-        label="Busque pelo nome da música ou nome da novela"
+        label="Busque pela música ou novela"
         variant="outlined"
         fullWidth
         size="small"
@@ -167,6 +180,13 @@ const SongLibrary = () => {
           }}
         />
       </Box>
+
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      />
     </Box>
   );
 };

@@ -4,6 +4,7 @@ import theme from './theme';
 import SongLibrary from './components/SongLibrary';
 import Playlist from './components/Playlist';
 import Footer from './components/Footer';
+import Snackbar from './components/Snackbar';
 import './App.css';
 
 const App = () => {
@@ -33,7 +34,7 @@ const App = () => {
             <Typography variant="h5" gutterBottom fontWeight="bold">
               Trilhas sonoras
             </Typography>
-            <Box flex={1}>
+            <Box flex={1} overflow="auto">
               <SongLibrary />
             </Box>
           </Box>
@@ -42,7 +43,7 @@ const App = () => {
             <Typography variant="h5" gutterBottom fontWeight="bold">
               Favoritas
             </Typography>
-            <Box flex={1}>
+            <Box flex={1} overflow="auto">
               <Playlist />
             </Box>
           </Box>
@@ -50,6 +51,7 @@ const App = () => {
       </main>
 
       <Footer />
+      <Snackbar />
     </ThemeProvider>
   );
 };

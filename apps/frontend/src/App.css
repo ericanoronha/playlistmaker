@@ -44,18 +44,30 @@ input {
   color: #f44336;
 }
 
-/* Corrige ícones de ordenação no DataGrid */
 .MuiDataGrid-columnHeaderDraggableContainer svg {
   color: #B0B0B0;
 }
 
-/* Remove corte de campo de busca */
 .MuiOutlinedInput-root {
   overflow: visible;
 }
 
-/* Permite rolagem interna nas colunas */
 .container > div {
   overflow-y: auto;
   height: 100%;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
 }

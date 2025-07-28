@@ -7,7 +7,7 @@ const DiagnosticsDrawer = ({ diagnostics }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)} variant="text">Observação de performance e diagnóstico técnico</Button>
+      <Button onClick={() => setOpen(true)} variant="text">Observação de performance e diagnóstico técnico da aplicação</Button>
       <Drawer anchor="bottom" open={open} onClose={() => setOpen(false)}>
         <Box p={3}>
           <Typography variant="h6" gutterBottom>Diagnóstico</Typography>

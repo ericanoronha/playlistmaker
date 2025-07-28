@@ -12,26 +12,37 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AudioPlayer from './AudioPlayer';
-import { getDeviceId } from '../hooks/useDeviceId';
+import { getDeviceId } from '../utils/deviceId';
+import { getCachedPlaylist, setCachedPlaylist } from '../utils/cacheUtils';
+import Snackbar from './Snackbar';
 
 const Playlist = () => {
   const [playlist, setPlaylist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentTrack, setCurrentTrack] = useState(null);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const deviceId = getDeviceId();
 
   const fetchPlaylist = useCallback(() => {
     setLoading(true);
-    fetch(`/api/playlist?deviceId=${deviceId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setPlaylist(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+    const cached = getCachedPlaylist(deviceId);
+    if (cached) {
+      setPlaylist(cached);
+      setLoading(false);
+    } else {
+      fetch(`/api/playlist?deviceId=${deviceId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setPlaylist(data);
+          setCachedPlaylist(deviceId, data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setSnackbar({ open: true, message: 'Erro ao carregar a playlist', severity: 'error' });
+          setLoading(false);
+        });
+    }
   }, [deviceId]);
 
   useEffect(() => {
@@ -56,6 +67,7 @@ const Playlist = () => {
       })
       .catch((err) => {
         console.error(err);
+        setSnackbar({ open: true, message: 'Erro ao remover faixa', severity: 'error' });
         setLoading(false);
       });
   };
@@ -66,6 +78,7 @@ const Playlist = () => {
     const [moved] = reordered.splice(result.source.index, 1);
     reordered.splice(result.destination.index, 0, moved);
     setPlaylist(reordered);
+    setCachedPlaylist(deviceId, reordered);
     // TODO: enviar nova ordem ao backend (via PATCH/PUT com deviceId)
   };
 
@@ -117,6 +130,8 @@ const Playlist = () => {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             p: 2,
+                            border: '1px solid',
+                            borderColor: 'success.main',
                             transition: 'background 0.3s',
                             backgroundColor: snapshot.isDragging
                               ? 'grey.800'
@@ -194,6 +209,12 @@ const Playlist = () => {
           )}
         </>
       )}
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      />
     </Box>
   );
 };
