@@ -1,7 +1,6 @@
+/* playlistmaker/apps/backend/index.js */
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import playlistRoutes from './routes/playlists/index.js';
 import songRoutes from './routes/songs/index.js';
 
@@ -24,20 +23,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// Rotas da API
 app.use('/api/songs', songRoutes);
 app.use('/api/playlist', playlistRoutes);
-
-// Frontend em produção
-if (process.env.NODE_ENV === 'production') {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  const publicPath = path.join(__dirname, 'public');
-  app.use(express.static(publicPath));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
-  });
-}
 
 export default app;
