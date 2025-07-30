@@ -1,8 +1,8 @@
 const playlistData = {
   test123: {
     'mocked-id': {
-      nome: 'Música 1',
-      interprete: 'Artista 1',
+      title: 'Música 1',
+      artist: 'Artista 1',
       audio: 'https://youtube.com/example',
       novela: 'Vale Tudo',
       tipo: 'nacional',
@@ -41,7 +41,6 @@ export const get = (ref) => {
   return Promise.resolve({ val: () => null, exists: () => false });
 };
 
-// ✅ push agora retorna um ref com estrutura compatível com set()
 export const push = (refObj) => {
   const path = refObj._path.pieces_;
   const newKey = 'mocked-id';
@@ -75,8 +74,8 @@ export const set = (ref, value) => {
 export const resetMockData = () => {
   playlistData.test123 = {
     'mocked-id': {
-      nome: 'Música 1',
-      interprete: 'Artista 1',
+      title: 'Música 1',
+      artist: 'Artista 1',
       audio: 'https://youtube.com/example',
       novela: 'Vale Tudo',
       tipo: 'nacional',

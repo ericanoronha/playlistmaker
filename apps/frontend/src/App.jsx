@@ -54,6 +54,7 @@ const App = () => {
           gap={4}
           height="calc(100vh - 200px)"
           px={4}
+          mb={20}
         >
           <Box flex={2} minHeight={0} overflow="auto">
             <Typography variant="h5" gutterBottom fontWeight="bold">

@@ -1,8 +1,8 @@
 export const deviceId = 'test123';
 
 export const mockTrack = {
-  nome: 'Chocolate com Pimenta',
-  interprete: 'Deborah Blando',
+  title: 'Chocolate com Pimenta',
+  artist: 'Deborah Blando',
   audio: 'https://www.youtube.com/watch?v=DJaO0AI93Wg',
   novela: 'Chocolate com Pimenta',
   tipo: 'nacional',
@@ -11,8 +11,8 @@ export const mockTrack = {
 export const reorderedPlaylist = [
   {
     id: 'mocked-id',
-    nome: 'Reordenada',
-    interprete: 'X',
+    title: 'Reordenada',
+    artist: 'X',
     audio: 'https://www.youtube.com/watch?v=mocked',
     novela: 'Chocolate com Pimenta',
     tipo: 'nacional',

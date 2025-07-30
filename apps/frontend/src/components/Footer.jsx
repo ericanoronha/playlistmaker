@@ -1,12 +1,17 @@
-import React from 'react';
-import { Typography, Box, Link } from '@mui/material';
+import React, { useState } from 'react';
+import { Typography, Box, Button } from '@mui/material';
+import DOMPurify from 'dompurify';
 import DiagnosticsDrawer from './DiagnosticsDrawer';
 import { getCachedPlaylist, clearDeviceCache } from '../utils/cacheUtils';
 import { getDeviceId } from '../utils/deviceId';
 
+const sanitize = (value) => DOMPurify.sanitize(value || '');
+
 const Footer = () => {
+  const [showDiagnostics, setShowDiagnostics] = useState(false);
   const deviceId = getDeviceId();
   const cache = getCachedPlaylist(deviceId) || [];
+  const diagnostics = { deviceId, cache, renderTime: window.performance?.now().toFixed(2) + 'ms', totalSongs: cache.length, cacheSizeKB: JSON.stringify(cache).length / 1024 };
 
   const handleClearCache = () => {
     clearDeviceCache();
@@ -28,14 +33,28 @@ const Footer = () => {
         zIndex: 998,
       }}
     >
-      <Box>
+      <Box display="flex" flexDirection="column" alignItems="center" gap={1}>
         <Typography variant="body2" gutterBottom>
-          Feito com ♡ por @ericanoronha
+          Feito com ♡ por 
+          <a
+            href="https://github.com/ericanoronha/playlistmaker"
+            target="_blank"
+            rel="noopener noreferrer"
+
+          > erica noronha</a>
         </Typography>
-        <Link component="button" variant="body2" onClick={handleClearCache} underline="hover">
-          Limpar cache local
-        </Link>
-        <DiagnosticsDrawer diagnostics={{ deviceId, cache }} />
+
+        <Box display="flex" flexWrap="wrap" gap={1} justifyContent="center">
+          <Button onClick={handleClearCache} variant="text">Limpar cache local</Button>
+          <Button onClick={() => setShowDiagnostics(true)} variant="text">
+            Diagnóstico de performance
+          </Button>
+          <DiagnosticsDrawer
+            open={showDiagnostics}
+            onClose={() => setShowDiagnostics(false)}
+            diagnostics={diagnostics}
+          />
+        </Box>
       </Box>
     </footer>
   );

@@ -10,6 +10,7 @@ export default {
     'src/**/*.js',
     'controllers/**/*.js',
     'services/**/*.js',
+    'routes/**/*.js'
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov'],

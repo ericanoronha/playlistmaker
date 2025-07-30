@@ -1,26 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Drawer, Button, Box, Typography, List, ListItem,
+  Drawer,
+  Box,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Button,
 } from '@mui/material';
 
-const DiagnosticsDrawer = ({ diagnostics }) => {
-  const [open, setOpen] = useState(false);
+const DiagnosticsDrawer = ({ open = false, onClose = () => {}, diagnostics = {} }) => {
   return (
-    <>
-      <Button onClick={() => setOpen(true)} variant="text">Diagnóstico da aplicação</Button>
-      <Drawer anchor="bottom" open={open} onClose={() => setOpen(false)}>
-        <Box p={3}>
-          <Typography variant="h6" gutterBottom>Diagnóstico</Typography>
-          <List>
-            {Object.entries(diagnostics).map(([label, value]) => (
-              <ListItem key={label}>
-                <Typography variant="body2"><strong>{label}:</strong> {String(value)}</Typography>
-              </ListItem>
-            ))}
-          </List>
+    <Drawer anchor="bottom" open={open} onClose={onClose}>
+      <Box p={3} bgcolor="#1e1e1e" color="#fff">
+        <Typography variant="h6" gutterBottom>
+          Diagnóstico da aplicação
+        </Typography>
+        <List>
+          {Object.entries(diagnostics).map(([key, value]) => (
+            <ListItem key={key} divider>
+              <ListItemText primary={key} secondary={JSON.stringify(value)} />
+            </ListItem>
+          ))}
+        </List>
+        <Box textAlign="right">
+          <Button onClick={onClose} variant="contained" color="primary">
+            Fechar
+          </Button>
         </Box>
-      </Drawer>
-    </>
+      </Box>
+    </Drawer>
   );
 };
 
