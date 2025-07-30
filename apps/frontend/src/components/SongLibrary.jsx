@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import DOMPurify from 'dompurify';
 import {
   Box,
   Typography,
@@ -13,19 +14,15 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { usePlaylist } from '../context/PlaylistContext';
 import Snackbar from './Snackbar';
 
+const sanitize = (value) => DOMPurify.sanitize(value || '');
+
 const SongLibrary = () => {
   const [songs, setSongs] = useState([]);
   const [filter, setFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [addingId, setAddingId] = useState(null);
 
-  const {
-    playlist,
-    addTrack,
-    fetchPlaylist,
-    snackbar,
-    setSnackbar,
-  } = usePlaylist();
+  const { playlist, addTrack, fetchPlaylist, snackbar, setSnackbar } = usePlaylist();
 
   const fetchSongs = useCallback(() => {
     setLoading(true);
@@ -50,10 +47,18 @@ const SongLibrary = () => {
     setAddingId(song.id);
     addTrack(song)
       .then(() => {
-        setSnackbar({ open: true, message: 'Adicionado à playlist!', severity: 'success' });
+        setSnackbar({
+          open: true,
+          message: 'Adicionado à playlist!',
+          severity: 'success',
+        });
       })
       .catch(() => {
-        setSnackbar({ open: true, message: 'Erro ao adicionar à playlist', severity: 'error' });
+        setSnackbar({
+          open: true,
+          message: 'Erro ao adicionar à playlist',
+          severity: 'error',
+        });
       })
       .finally(() => setAddingId(null));
   };
@@ -66,9 +71,27 @@ const SongLibrary = () => {
   });
 
   const columns = [
-    { field: 'title', headerName: 'Faixa', flex: 1, sortable: true },
-    { field: 'artist', headerName: 'Artista', flex: 1, sortable: true },
-    { field: 'novela', headerName: 'Novela', flex: 1, sortable: true },
+    {
+      field: 'title',
+      headerName: 'Faixa',
+      flex: 1,
+      sortable: true,
+      renderCell: (params) => sanitize(params.value),
+    },
+    {
+      field: 'artist',
+      headerName: 'Artista',
+      flex: 1,
+      sortable: true,
+      renderCell: (params) => sanitize(params.value),
+    },
+    {
+      field: 'novela',
+      headerName: 'Novela',
+      flex: 1,
+      sortable: true,
+      renderCell: (params) => sanitize(params.value),
+    },
     {
       field: 'tipo',
       headerName: 'Tipo',
@@ -76,9 +99,10 @@ const SongLibrary = () => {
       sortable: true,
       renderCell: (params) => (
         <Chip
-          label={params.value || 'nacional'}
+          label={sanitize(params.value || 'nacional')}
           sx={{
-            backgroundColor: params.value === 'internacional' ? '#FD7D23' : 'success.main',
+            backgroundColor:
+              params.value === 'internacional' ? '#FD7D23' : 'success.main',
             color: '#fff',
           }}
           size="small"
@@ -95,12 +119,22 @@ const SongLibrary = () => {
         const isFav = favorites.includes(row.id);
         return (
           <IconButton
-            aria-label={isFav ? `Já adicionado: ${row.title}` : `Adicionar à playlist: ${row.title}`}
+            aria-label={
+              isFav
+                ? `Já adicionado: ${sanitize(row.title)}`
+                : `Adicionar à playlist: ${sanitize(row.title)}`
+            }
             onClick={() => handleAddToPlaylist(row)}
             disabled={addingId === row.id || isFav}
             color={isFav ? 'error' : 'default'}
           >
-            {addingId === row.id ? <CircularProgress size={20} /> : isFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            {addingId === row.id ? (
+              <CircularProgress size={20} />
+            ) : isFav ? (
+              <FavoriteIcon />
+            ) : (
+              <FavoriteBorderIcon />
+            )}
           </IconButton>
         );
       },
@@ -116,20 +150,7 @@ const SongLibrary = () => {
         size="small"
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
-        sx={{
-          mb: 2,
-          '& label.Mui-focused': { color: '#eee' },
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': { borderColor: '#666' },
-            '&:hover fieldset': { borderColor: '#888' },
-            '&.Mui-focused fieldset': { borderColor: '#eee' },
-          },
-          input: { color: '#fff' },
-        }}
-        InputLabelProps={{
-          shrink: true,
-          style: { color: '#aaa', backgroundColor: '#1e1e1e', padding: '0 4px' },
-        }}
+        sx={{ mb: 2 }}
       />
 
       <Box flex={1} minHeight={0}>
@@ -144,14 +165,6 @@ const SongLibrary = () => {
           localeText={{
             ...ptBR.components.MuiDataGrid.defaultProps.localeText,
             noRowsLabel: 'Nenhuma música encontrada',
-            columnHeaderSortIconLabel: 'Ordenar',
-          }}
-          sx={{
-            backgroundColor: 'background.paper',
-            '& .MuiDataGrid-columnHeaderDraggableContainer': {
-              justifyContent: 'center',
-              color: '#B0B0B0',
-            },
           }}
         />
       </Box>

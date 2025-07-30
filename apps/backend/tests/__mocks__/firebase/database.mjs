@@ -41,7 +41,6 @@ export const get = (ref) => {
   return Promise.resolve({ val: () => null, exists: () => false });
 };
 
-// ✅ push agora retorna um ref com estrutura compatível com set()
 export const push = (refObj) => {
   const path = refObj._path.pieces_;
   const newKey = 'mocked-id';

@@ -10,14 +10,26 @@ config();
 let credentials;
 
 try {
-  credentials = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+  if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+    credentials = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+    console.log('[firebase] Credenciais carregadas da variável de ambiente');
+  } else {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const localPath = path.resolve(
+      __dirname,
+      '../firebase-service-account.json',
+    );
+
+    credentials = JSON.parse(readFileSync(localPath, 'utf8'));
+    console.log('[firebase] Credenciais carregadas do arquivo local');
+  }
 } catch (err) {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-
-  const localPath = path.resolve(__dirname, '../firebase-service-account.json');
-
-  credentials = JSON.parse(readFileSync(localPath, 'utf8'));
+  console.error(
+    '[firebase] Erro ao carregar credenciais Firebase:',
+    err.message,
+  );
+  throw new Error('Falha ao carregar credenciais do Firebase');
 }
 
 const app = initializeApp({

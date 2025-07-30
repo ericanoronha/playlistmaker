@@ -78,6 +78,12 @@ footer p {
   text-transform: lowercase;
 }
 
+footer a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 0.35em;
+}
+
 footer {
   font-size: 0.75rem;
   color: #aaa;

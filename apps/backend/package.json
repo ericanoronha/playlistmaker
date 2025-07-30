@@ -2,13 +2,13 @@
   "name": "playlistmaker-backend",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
+    "seed": "node src/seed.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand --coverage",
-    "test:clean": "jest --clearCache && rimraf coverage && npm run test",
-    "seed": "node src/seed.js"
+    "test:clean": "jest --clearCache && rimraf coverage && npm run test"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -1,4 +1,5 @@
 import React, { useEffect, Suspense } from 'react';
+import DOMPurify from 'dompurify';
 import {
   Box,
   Typography,
@@ -62,6 +63,8 @@ const Playlist = () => {
     setCurrentTrack(song);
   };
 
+  const sanitize = (value) => DOMPurify.sanitize(value || '');
+
   return (
     <Box
       role="region"
@@ -77,7 +80,7 @@ const Playlist = () => {
         </Box>
       ) : error ? (
         <Typography variant="body2" color="error" sx={{ mt: 2 }}>
-          {error}
+          {sanitize(error)}
         </Typography>
       ) : playlist.length === 0 ? (
         <Typography variant="body2" sx={{ mt: 2 }}>
@@ -117,7 +120,7 @@ const Playlist = () => {
                               ? 'grey.800'
                               : 'background.paper',
                           }}
-                          aria-label={`Faixa ${song.title} de ${song.artist}`}
+                          aria-label={`Faixa ${sanitize(song.title)} de ${sanitize(song.artist)}`}
                         >
                           <Box
                             onClick={() => handlePlay(song)}
@@ -130,20 +133,22 @@ const Playlist = () => {
                               variant="subtitle1"
                               fontWeight="bold"
                               noWrap
-                              title={`${song.title} — ${song.artist}`}
+                              title={`${sanitize(song.title)} — ${sanitize(song.artist)}`}
                             >
-                              {song.title} — {song.artist}
+                              {sanitize(song.title)} — {sanitize(song.artist)}
                             </Typography>
                             <Typography
                               variant="body2"
                               color="text.secondary"
                               noWrap
-                              title={song.novela || 'Novela não informada'}
+                              title={sanitize(
+                                song.novela || 'Novela não informada',
+                              )}
                             >
-                              {song.novela || 'Novela não informada'}
+                              {sanitize(song.novela || 'Novela não informada')}
                             </Typography>
                             <Chip
-                              label={song.tipo}
+                              label={sanitize(song.tipo)}
                               size="small"
                               sx={{
                                 mt: 1,
@@ -161,7 +166,7 @@ const Playlist = () => {
                               edge="end"
                               color="error"
                               onClick={() => handleRemove(song.id)}
-                              aria-label={`Remover ${song.title} da playlist`}
+                              aria-label={`Remover ${sanitize(song.title)} da playlist`}
                             >
                               <DeleteIcon />
                             </IconButton>

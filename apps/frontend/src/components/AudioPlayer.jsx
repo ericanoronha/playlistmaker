@@ -33,13 +33,13 @@ const AudioPlayer = ({ track, playlist }) => {
   return (
     <Box
       position="fixed"
-      bottom="48px"
+      bottom="80px"
       left={0}
       right={0}
       bgcolor="#1e1e1e"
       p={2}
       borderTop="1px solid #333"
-      zIndex={999}
+      zIndex={997}
     >
       <ReactPlayer
         ref={playerRef}

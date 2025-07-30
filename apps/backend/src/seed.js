@@ -9,8 +9,8 @@ const __dirname = path.dirname(__filename);
 const data = JSON.parse(
   readFileSync(
     path.resolve(__dirname, '../data/trilhas-de-novelas.json'),
-    'utf8'
-  )
+    'utf8',
+  ),
 );
 
 const seed = async () => {
@@ -18,19 +18,20 @@ const seed = async () => {
   await ref.remove();
 
   for (const novela of data) {
-    const trilhas = novela.trilhas.flatMap((trilha) =>
-      trilha.faixas.map((faixa) => ({
-        title: faixa.nome,
-        artist: faixa.interprete,
-        audio: faixa.audio || '',
-        novela: novela.nome,
-        tipo: trilha.tipo,
-      }))
-    );
+    for (const trilha of novela.trilhas) {
+      for (const faixa of trilha.faixas) {
+        const faixaObj = {
+          title: faixa.nome,
+          artist: faixa.interprete,
+          audio: faixa.audio || '',
+          novela: novela.nome,
+          tipo: trilha.tipo,
+          ano: novela.ano || null,
+        };
 
-    for (const faixa of trilhas) {
-      const newRef = ref.push();
-      await newRef.set(faixa);
+        const newRef = ref.push();
+        await newRef.set(faixaObj);
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 {
-  "name": "playlistmaker-monorepo",
+  "name": "playlistmaker",
   "private": true,
+  "type": "module",
   "workspaces": [
     "apps/frontend",
     "apps/backend"
@@ -8,10 +9,11 @@
   "scripts": {
     "lint": "eslint . --ext .js,.jsx",
     "format": "prettier --write .",
-    "dev": "npx concurrently \"npm:start --workspace=apps/backend\" \"npm:start --workspace=apps/frontend\"",
+    "dev": "concurrently -n backend,frontend -c green,cyan \"npm:start --workspace=apps/backend\" \"npm:start --workspace=apps/frontend\"",
     "dev:backend": "npm run dev --workspace=apps/backend",
     "dev:frontend": "npm run dev --workspace=apps/frontend",
-    "dev:fullstack": "npx concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:fullstack": "pm2 start ecosystem.config.cjs && pm2 logs",
+    "test": "npm run test --workspaces",
     "test:backend": "npm run test --workspace=apps/backend",
     "seed:db": "npm run seed --workspace=apps/backend",
     "clean:node": "find . -type d -name 'node_modules' -prune -exec rm -rf '{}' +",
@@ -22,7 +24,9 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.37.1",
     "jest": "^30.0.5",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "wait-on": "^8.0.4",
+    "pm2": "^5.3.0"
   },
   "dependencies": {
     "shaka-player": "^4.15.8",

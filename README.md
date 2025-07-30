@@ -57,9 +57,8 @@ Acesse o app em: [http://localhost:5173](http://localhost:5173).
 
 -   React 18 + Vite
 -   Material UI (MUI)
--   Zustand (estado global)
 -   react-youtube (embed YouTube)
-~~-   shaka-player (para fontes DASH - não usado atualmente, acabei optando pelo react-youtube)~~
+- ~~shaka-player (para DASH - não usado atualmente, acabei optando pelo react-youtube)~~
 
 ### Backend
 -   Node.js + Express
