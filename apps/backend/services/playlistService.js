@@ -1,12 +1,6 @@
 import { db } from '../src/firebase.js';
 import { ref as dbRef, get, set, remove, push } from 'firebase/database';
 
-const getAllSongs = async () => {
-  const snapshot = await db.ref('trilhas-de-novelas').once('value');
-  const data = snapshot.val();
-  return data ? Object.values(data) : [];
-};
-
 export const getPlaylistByDevice = async (deviceId) => {
   const ref = dbRef(db, `playlist/${deviceId}`);
   const snapshot = await get(ref);
@@ -20,7 +14,9 @@ export const addTrackToDevice = async (deviceId, trackData) => {
     !trackData ||
     typeof trackData !== 'object' ||
     Array.isArray(trackData) ||
-    Object.keys(trackData).length === 0
+    Object.keys(trackData).length === 0 ||
+    !trackData.title || 
+    !trackData.audio
   ) {
     throw new Error('Dados da faixa inválidos');
   }

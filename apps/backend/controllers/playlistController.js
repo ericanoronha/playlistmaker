@@ -17,7 +17,12 @@ export const getPlaylist = async (req, res) => {
 
   try {
     const playlist = await getPlaylistByDevice(deviceId);
-    res.json(playlist);
+
+    if (!playlist || playlist.length === 0) {
+      return res.status(204).json({ message: 'Nenhuma trilha favoritada ainda.' });
+    }
+
+    res.status(200).json(playlist);
   } catch (err) {
     console.error('Erro ao buscar playlist:', err);
     res.status(500).json({ error: 'Erro ao carregar a playlist' });
@@ -25,6 +30,7 @@ export const getPlaylist = async (req, res) => {
 };
 
 export const addTrack = async (req, res) => {
+  //console.log('[DEBUG POST body]', req.body);
   const { deviceId } = req.params;
   const track = req.body;
 
@@ -43,8 +49,8 @@ export const addTrack = async (req, res) => {
     if (err.message === 'Dados da faixa inválidos') {
       return res.status(400).json({ error: err.message });
     }
-    console.error('Erro ao adicionar música:', err);
-    res.status(500).json({ error: 'Erro ao adicionar música' });
+    console.error('Erro ao adicionar faixa:', err);
+    res.status(500).json({ error: 'Erro ao adicionar faixa' });
   }
 };
 
@@ -66,8 +72,8 @@ export const deleteTrack = async (req, res) => {
     if (err.message === 'Faixa não encontrada') {
       return res.status(404).json({ error: err.message });
     }
-    console.error('Erro ao remover música:', err);
-    res.status(500).json({ error: 'Erro ao remover música' });
+    console.error('Erro ao remover faixa:', err);
+    res.status(500).json({ error: 'Erro ao remover faixa' });
   }
 };
 

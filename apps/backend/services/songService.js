@@ -8,14 +8,16 @@ export const getAllSongs = async () => {
 
   if (trilhas) {
     Object.values(trilhas).forEach((item, index) => {
-      songs.push({
-        id: `trilha-${index}`,
-        title: item.title,
-        artist: item.artist,
-        novela: item.novela,
-        tipo: item.tipo,
-        audio: item.audio,
-      });
+      if (item.title && item.artist && item.audio) {
+        songs.push({
+          id: `trilha-${index}`,
+          title: item.title,
+          artist: item.artist,
+          novela: item.novela || '',
+          tipo: item.tipo || '',
+          audio: item.audio,
+        });
+      }
     });
   }
 

@@ -11,9 +11,7 @@ const Footer = () => {
   const [showDiagnostics, setShowDiagnostics] = useState(false);
   const deviceId = getDeviceId();
   const cache = getCachedPlaylist(deviceId) || [];
-  const diagnostics = { deviceId, cache, renderTime: window.performance?.now().toFixed(2) + 'ms',
-  totalSongs: cache.length,
-  cacheSizeKB: JSON.stringify(cache).length / 1024 };
+  const diagnostics = { deviceId, cache, renderTime: window.performance?.now().toFixed(2) + 'ms', totalSongs: cache.length, cacheSizeKB: JSON.stringify(cache).length / 1024 };
 
   const handleClearCache = () => {
     clearDeviceCache();

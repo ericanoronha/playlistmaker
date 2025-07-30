@@ -31,8 +31,8 @@ beforeEach(() => {
 const deviceId = 'test123';
 const invalidDeviceId = 'invalid-id';
 const validTrack = {
-  nome: 'Nova música',
-  interprete: 'Novo artista',
+  title: 'Nova música',
+  artist: 'Novo artista',
   audio: 'https://youtube.com/nova',
   novela: 'Senhora do Destino',
   tipo: 'nacional',
@@ -83,8 +83,8 @@ describe('playlistService', () => {
       const reordered = [
         {
           id: 'mocked-id',
-          nome: 'Nova Ordem',
-          interprete: 'Zezé',
+          title: 'Nova Ordem',
+          artist: 'Zezé',
           audio: 'https://youtube.com/new',
           novela: 'A Favorita',
           tipo: 'nacional',
