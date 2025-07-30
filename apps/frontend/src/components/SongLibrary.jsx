@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import DOMPurify from 'dompurify';
 import {
   Box,
@@ -63,11 +63,13 @@ const SongLibrary = () => {
       .finally(() => setAddingId(null));
   };
 
-  const favorites = playlist.map((item) => item.id);
+  const favorites = useMemo(() => playlist.map((item) => item.id), [playlist]);
+
   const filteredSongs = songs.filter((song) => {
     const titleMatch = song.title?.toLowerCase().includes(filter.toLowerCase());
+    const artistMatch = song.artist?.toLowerCase().includes(filter.toLowerCase());
     const novelaMatch = song.novela?.toLowerCase().includes(filter.toLowerCase());
-    return titleMatch || novelaMatch;
+    return titleMatch || artistMatch || novelaMatch;
   });
 
   const columns = [

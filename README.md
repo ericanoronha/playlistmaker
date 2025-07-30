@@ -8,7 +8,8 @@ Aplicação fullstack de criação e gerenciamento de playlists de músicas.
 - Playlist persistente por dispositivo (via deviceId)
 - Cache local com expiração automática
 - Diagnóstico local e limpeza de cache facilitada
-- Adição e remoção de faixas da playlist com drag-and-drop
+- Adição e remoção de faixas da playlist
+- Reordenação de faixas da playlist com drag-and-drop
 
 ## Como executar localmente
 ```bash
@@ -21,6 +22,7 @@ npm  run  dev:fullstack
 ```bash
 npm  run  test:backend
 ```
+
 ```bash
 npm  run  build:frontend
 npm  run  start:backend
@@ -51,6 +53,8 @@ Acesse o app em: [http://localhost:5173](http://localhost:5173).
 |POST|`/api/playlist/:deviceId`|Adiciona faixa à playlist|
 |DELETE|`/api/playlist/:trackId?deviceId=...`|Remove faixa específica|
 |PUT|`/api/playlist/reorder/:deviceId`|Reordena a playlist|
+|GET|`/api/health`|Verifica se o servidor está sendo executado|
+|GET|`/api-docs`|Acessa a documentação Swagger da API|
 
 ## Stack
 ### Frontend
@@ -64,8 +68,10 @@ Acesse o app em: [http://localhost:5173](http://localhost:5173).
 -   Node.js + Express
 -   Firebase Admin SDK (Realtime Database)
 -   Jest + Supertest (testes)
+-   Swagger para documentação de API
 
 ### DevOps
+-   PM2 para execução de servidores locais
 -   Docker + docker-compose
 -   GitHub Actions (CI/CD)
 -   Render.com (deploy)

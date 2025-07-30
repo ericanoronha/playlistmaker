@@ -3,6 +3,17 @@ import { getAllSongs } from '../../services/songService.js';
 
 const router = Router();
 
+/**
+ * @swagger
+ * /api/songs:
+ *   get:
+ *     summary: Lista todas as músicas disponíveis
+ *     responses:
+ *       200:
+ *         description: Lista de músicas
+ *       204:
+ *         description: Nenhuma música encontrada
+ */
 router.get('/', async (req, res) => {
   try {
     const songs = await getAllSongs();
