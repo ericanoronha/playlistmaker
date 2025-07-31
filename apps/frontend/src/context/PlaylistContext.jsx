@@ -17,20 +17,17 @@ export const PlaylistProvider = ({ children }) => {
 
   const deviceId = getDeviceId();
 
-  const fetchPlaylist = useCallback(async () => {
+  const fetchPlaylist = useCallback(async (force = false) => {
     setLoading(true);
     setError(null);
 
     try {
       const cached = getCachedPlaylist(deviceId);
-      if (cached?.length) {
+      if (cached?.length && !force) {
         setPlaylist(cached);
       } else {
-        const res = await fetch(
-          `/api/playlist/${encodeURIComponent(deviceId)}`,
-        );
+        const res = await fetch(`/api/playlist/${encodeURIComponent(deviceId)}`);
         if (!res.ok) throw new Error('Erro ao buscar playlist');
-
         const data = await res.json();
         setPlaylist(data);
         setCachedPlaylist(deviceId, data);
@@ -48,30 +45,47 @@ export const PlaylistProvider = ({ children }) => {
       throw new Error('Faixa inválida');
     }
 
-    const res = await fetch(`/api/playlist/${encodeURIComponent(deviceId)}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(track),
-    });
+    try {
+      const res = await fetch(`/api/playlist/${encodeURIComponent(deviceId)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(track),
+      });
 
-    if (!res.ok) throw new Error('Erro ao adicionar faixa à playlist');
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(`Erro ao adicionar faixa: ${msg}`);
+      }
 
-    await fetchPlaylist();
+      const { id } = await res.json();
+      if (!id) throw new Error('ID retornado inválido');
+
+      await fetchPlaylist(true);
+    } catch (err) {
+      console.error('[PlaylistContext] Erro ao adicionar faixa:', err);
+      throw err;
+    }
   };
 
-  const removeTrack = async (id) => {
-    if (!id) throw new Error('ID inválido para remoção');
+  const removeTrack = async (trackId) => {
+    if (!trackId) throw new Error('ID inválido para remoção');
 
-    const res = await fetch(
-      `/api/playlist/${encodeURIComponent(deviceId)}/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
+    try {
+      const res = await fetch(
+        `/api/playlist/${encodeURIComponent(deviceId)}/${encodeURIComponent(trackId)}`,
+        { method: 'DELETE' }
+      );
 
-    if (!res.ok) throw new Error('Erro ao remover faixa da playlist');
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(`Erro ao remover faixa: ${msg}`);
+      }
 
-    await fetchPlaylist();
+      await fetchPlaylist(true);
+    } catch (err) {
+      console.error('[PlaylistContext] Erro ao remover faixa:', err);
+      throw err;
+    }
   };
 
   const reorderPlaylist = async (fromIndex, toIndex) => {
@@ -88,10 +102,7 @@ export const PlaylistProvider = ({ children }) => {
         body: JSON.stringify({ playlist: updated }),
       });
     } catch (err) {
-      console.error(
-        '[PlaylistContext] Falha ao sincronizar reordenação com backend:',
-        err,
-      );
+      console.error('[PlaylistContext] Falha ao sincronizar reordenação com backend:', err);
     }
   };
 

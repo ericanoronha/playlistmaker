@@ -1,3 +1,4 @@
+# .github/workflows/ci.yml
 name: CI/CD Pipeline
 
 on:
@@ -36,8 +37,5 @@ jobs:
         env:
           RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
-          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
-            echo "Missing RENDER_DEPLOY_HOOK_URL secret"
-            exit 1
-          fi
+          echo "Triggering Render Deploy Hook..."
           curl -X POST "$RENDER_DEPLOY_HOOK_URL"

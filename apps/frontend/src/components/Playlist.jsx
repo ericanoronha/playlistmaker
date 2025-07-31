@@ -28,6 +28,7 @@ const Playlist = () => {
     setCurrentTrack,
     snackbar,
     setSnackbar,
+    addTrack, 
   } = usePlaylist();
 
   useEffect(() => {
@@ -36,16 +37,49 @@ const Playlist = () => {
 
   useEffect(() => {
     const listener = (e) => {
-      setCurrentTrack(e.detail);
+      const song = e.detail;
+
+      const { id, ...trackWithoutId } = song;
+
+      addTrack(trackWithoutId)
+        .then(() =>
+          setSnackbar({
+            open: true,
+            message: 'Faixa adicionada à playlist',
+            severity: 'success',
+          }),
+        )
+        .catch(() =>
+          setSnackbar({
+            open: true,
+            message: 'Erro ao adicionar faixa',
+            severity: 'error',
+          }),
+        );
     };
+
     window.addEventListener('playTrack', listener);
     return () => window.removeEventListener('playTrack', listener);
-  }, [setCurrentTrack]);
+  }, [addTrack, setSnackbar]);
 
   const handleRemove = async (id) => {
+    if (!id || typeof id !== 'string') {
+      setSnackbar({
+        open: true,
+        message: 'ID inválido da faixa',
+        severity: 'error',
+      });
+      return;
+    }
+
     try {
       await removeTrack(id);
-    } catch {
+      setSnackbar({
+        open: true,
+        message: 'Faixa removida com sucesso',
+        severity: 'success',
+      });
+    } catch (err) {
       setSnackbar({
         open: true,
         message: 'Erro ao remover faixa',
@@ -84,7 +118,7 @@ const Playlist = () => {
         </Typography>
       ) : playlist.length === 0 ? (
         <Typography variant="body2" sx={{ mt: 2 }}>
-          Nenhuma música na playlist.
+          Nenhuma trilha favorita ainda.
         </Typography>
       ) : (
         <>

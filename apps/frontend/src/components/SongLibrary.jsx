@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import DOMPurify from 'dompurify';
 import {
   Box,
-  Typography,
   TextField,
   Chip,
   IconButton,
@@ -44,8 +43,20 @@ const SongLibrary = () => {
   }, [fetchSongs, fetchPlaylist]);
 
   const handleAddToPlaylist = (song) => {
+    const alreadyExists = playlist.some(item => item.originalId === song.id);
+    if (alreadyExists) {
+      setSnackbar({
+        open: true,
+        message: 'Essa faixa já está na playlist',
+        severity: 'warning',
+      });
+      return;
+    }
+
     setAddingId(song.id);
-    addTrack(song)
+
+    const { id, ...songWithoutId } = song;
+    addTrack({ ...songWithoutId, originalId: id })
       .then(() => {
         setSnackbar({
           open: true,
@@ -63,7 +74,7 @@ const SongLibrary = () => {
       .finally(() => setAddingId(null));
   };
 
-  const favorites = useMemo(() => playlist.map((item) => item.id), [playlist]);
+  const favorites = useMemo(() => playlist.map((item) => item.originalId), [playlist]);
 
   const filteredSongs = songs.filter((song) => {
     const titleMatch = song.title?.toLowerCase().includes(filter.toLowerCase());
