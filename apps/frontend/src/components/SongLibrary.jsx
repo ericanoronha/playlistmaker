@@ -45,7 +45,9 @@ const SongLibrary = () => {
 
   const handleAddToPlaylist = (song) => {
     setAddingId(song.id);
-    addTrack(song)
+
+    const { id, ...songWithoutId } = song; // ⚠️ removendo ID artificial
+    addTrack(songWithoutId)
       .then(() => {
         setSnackbar({
           open: true,
